@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {EmployeeService} from '../shared/employee.service';
 import {NgForm} from '@angular/forms';
 import {ToastrService} from 'ngx-toastr';
+import {AuthService} from '../../core/auth.service';
+import {AppUser} from '../../model/app-user';
 
 @Component({
   selector: 'app-employee',
@@ -9,8 +11,11 @@ import {ToastrService} from 'ngx-toastr';
   styleUrls: ['./employee.component.css']
 })
 export class EmployeeComponent implements OnInit {
+  appUser: AppUser;
 
-  constructor(private employeeService: EmployeeService, private tostr: ToastrService) {
+
+  constructor(public employeeService: EmployeeService, private tostr: ToastrService, private authService: AuthService) {
+    authService.appUser$.subscribe(appUser => this.appUser = appUser);
   }
 
   ngOnInit() {
@@ -38,6 +43,10 @@ export class EmployeeComponent implements OnInit {
         salary: 0
       };
     }
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }
